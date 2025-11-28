@@ -19,9 +19,10 @@ Usuario habla (audio)
 ## 🚀 Características
 
 - ✅ **ASR**: Transcripción de voz a texto con `gpt-4o-mini-transcribe`
-- ✅ **LLM**: Procesamiento inteligente con `gpt-5-nano`
-- ✅ **TTS**: Síntesis de voz con `gpt-4o-mini-tts`
+- ✅ **LLM**: Procesamiento inteligente con `gpt-5-nano` (con reasoning)
+- ✅ **TTS**: Síntesis de voz con `gpt-4o-mini-tts` (formato Opus)
 - ✅ **API REST**: FastAPI con documentación OpenAPI automática
+- ✅ **Interfaz de prueba**: Página web interactiva para demos
 - ✅ **Docker**: Containerización completa
 - ✅ **CI/CD**: Pipeline automatizado con GitHub Actions
 - ✅ **Tests**: Cobertura de tests unitarios
@@ -94,6 +95,19 @@ La API estará disponible en `http://localhost:8000`
 
 ## 🎯 Uso
 
+### 🎬 Demo Interactivo
+
+Prueba el sistema de forma interactiva en tu navegador:
+
+**http://localhost:8000/test-audio**
+
+Esta interfaz te permite:
+- 🎤 Subir archivos de audio (.wav o .mp3)
+- 📝 Ver la transcripción generada (ASR)
+- 💬 Ver la respuesta del LLM
+- 🔊 **Escuchar el audio de respuesta directamente en el navegador**
+- ⏱️ Monitorear el tiempo de procesamiento
+
 ### Endpoint principal: `/voice-agent`
 
 **POST** - Procesa audio y genera respuesta hablada
@@ -119,6 +133,8 @@ curl -X POST "http://localhost:8000/voice-agent" \
 ### Otros endpoints
 
 - **GET** `/` - Información del servicio
+- **GET** `/test-audio` - **Página de demo interactiva** 🎬
+- **POST** `/voice-agent-audio` - Retorna audio directamente (formato OGG/Opus)
 - **GET** `/health` - Health check
 - **GET** `/docs` - Documentación Swagger interactiva
 - **GET** `/openapi.json` - Schema OpenAPI
