@@ -30,7 +30,7 @@ async def generate_speech(text: str) -> str:
             model=settings.tts_model,
             voice=settings.tts_voice,  # Voces: alloy, echo, fable, onyx, nova, shimmer
             input=text,
-            response_format="opus"  # Opus tiene mejor compatibilidad con navegadores
+            response_format="mp3"
         )
         
         # Convertir audio a base64 para transmitir en JSON

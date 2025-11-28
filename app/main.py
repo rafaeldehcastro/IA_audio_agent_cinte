@@ -220,7 +220,7 @@ async def test_audio_page():
                     for (let i = 0; i < audioBytes.length; i++) {
                         audioArray[i] = audioBytes.charCodeAt(i);
                     }
-                    const audioBlob = new Blob([audioArray], { type: 'audio/ogg' });
+                    const audioBlob = new Blob([audioArray], { type: 'audio/mpeg' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     
                     const audioPlayer = document.getElementById('audioPlayer');
@@ -339,15 +339,15 @@ async def http_exception_handler(request, exc):
     response_class=Response,
     responses={
         200: {
-            "content": {"audio/ogg": {}},
-            "description": "Audio OGG/Opus generado"
+            "content": {"audio/mpeg": {}},
+            "description": "Audio MP3 generado"
         },
         400: {"model": ErrorResponse, "description": "Archivo inválido"},
         500: {"model": ErrorResponse, "description": "Error en procesamiento"}
     },
-    summary="Procesa audio y retorna respuesta directa en OGG/Opus",
+    summary="Procesa audio y retorna respuesta directa en MP3",
     description="""
-    Similar a /voice-agent pero retorna el audio directamente como OGG/Opus 
+    Similar a /voice-agent pero retorna el audio directamente como MP3 
     para reproducir en el navegador o descargar.
     
     Proceso:
@@ -403,9 +403,9 @@ async def voice_agent_audio(audio: UploadFile = File(..., description="Archivo d
         # Retornar audio directamente
         return Response(
             content=audio_bytes,
-            media_type="audio/ogg",
+            media_type="audio/mpeg",
             headers={
-                "Content-Disposition": "inline; filename=response.ogg",
+                "Content-Disposition": "inline; filename=response.mp3",
                 "X-Transcription": transcription[:100],  # Primeros 100 chars
                 "X-Response-Text": response_text[:100],
                 "Accept-Ranges": "bytes",
