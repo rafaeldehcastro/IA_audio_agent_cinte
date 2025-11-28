@@ -3,9 +3,14 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch, AsyncMock
 import io
+import os
+from pathlib import Path
 from app.main import app
 
 client = TestClient(app)
+
+# Ruta al archivo de audio de prueba
+TEST_AUDIO_PATH = Path(__file__).parent / "test_audio_1.wav"
 
 
 def test_root_endpoint():
@@ -108,3 +113,32 @@ def test_openapi_schema():
     assert "info" in schema
     assert "paths" in schema
     assert "/voice-agent" in schema["paths"]
+
+
+def test_voice_agent_with_real_audio():
+    """Test con archivo de audio real - detecta errores reales"""
+    if not TEST_AUDIO_PATH.exists():
+        pytest.skip("test_audio_1.wav no encontrado")
+    
+    # Leer el archivo de audio real
+    with open(TEST_AUDIO_PATH, "rb") as audio_file:
+        files = {
+            "audio": ("test_audio_1.wav", audio_file, "audio/wav")
+        }
+        
+        response = client.post("/voice-agent", files=files)
+        
+        # Imprimir respuesta para debug
+        print(f"\nStatus: {response.status_code}")
+        print(f"Response: {response.json()}")
+        
+        # Este test debería revelar cualquier error real
+        if response.status_code != 200:
+            print(f"Error detectado: {response.json()}")
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert "transcription" in data
+        assert "response_text" in data
+        assert "audio_base64" in data
+        assert "processing_time" in data
