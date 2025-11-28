@@ -20,9 +20,12 @@ Usuario habla (audio)
 
 - ✅ **ASR**: Transcripción de voz a texto con `gpt-4o-mini-transcribe`
 - ✅ **LLM**: Procesamiento inteligente con `gpt-5-nano` (con reasoning)
-- ✅ **TTS**: Síntesis de voz con `gpt-4o-mini-tts` (formato Opus)
+- ✅ **TTS**: Síntesis de voz con `gpt-4o-mini-tts` (formato MP3)
 - ✅ **API REST**: FastAPI con documentación OpenAPI automática
 - ✅ **Interfaz de prueba**: Página web interactiva para demos
+- ✅ **Audio Chat Conversacional**: Chat de voz con historial de sesión
+- ✅ **Grabación desde navegador**: Captura de audio directamente desde el micrófono
+- ✅ **Soporte multi-formato**: WAV, MP3, WebM, M4A, OGG
 - ✅ **Docker**: Containerización completa
 - ✅ **CI/CD**: Pipeline automatizado con GitHub Actions
 - ✅ **Tests**: Cobertura de tests unitarios
@@ -99,14 +102,25 @@ La API estará disponible en `http://localhost:8000`
 
 Prueba el sistema de forma interactiva en tu navegador:
 
-**http://localhost:8000/test-audio**
+#### 1. **Demo básico** - http://localhost:8000/test-audio
 
 Esta interfaz te permite:
-- 🎤 Subir archivos de audio (.wav o .mp3)
+- 🎤 Subir archivos de audio (.wav, .mp3, .webm, .m4a, .ogg)
 - 📝 Ver la transcripción generada (ASR)
 - 💬 Ver la respuesta del LLM
 - 🔊 **Escuchar el audio de respuesta directamente en el navegador**
 - ⏱️ Monitorear el tiempo de procesamiento
+
+#### 2. **Audio Chat Conversacional** - http://localhost:8000/audio-chat/demo
+
+Chat de voz con memoria conversacional:
+- 🎙️ **Grabar audio directamente desde el navegador** con tu micrófono
+- 📤 Subir archivos de audio pregrabados
+- 💭 **Mantiene contexto de conversación** entre mensajes
+- 📜 Ver historial completo de la conversación
+- 🔊 Reproducir respuestas de audio
+- 🆔 Gestión de sesiones para múltiples usuarios
+- ⏱️ Timer de grabación en tiempo real
 
 ### Endpoint principal: `/voice-agent`
 
@@ -134,7 +148,9 @@ curl -X POST "http://localhost:8000/voice-agent" \
 
 - **GET** `/` - Información del servicio
 - **GET** `/test-audio` - **Página de demo interactiva** 🎬
-- **POST** `/voice-agent-audio` - Retorna audio directamente (formato OGG/Opus)
+- **GET** `/audio-chat/demo` - **Chat de voz conversacional con grabación** 🎙️
+- **POST** `/audio-chat/` - Endpoint de chat conversacional (con historial)
+- **POST** `/voice-agent-audio` - Retorna audio directamente (formato MP3)
 - **GET** `/health` - Health check
 - **GET** `/docs` - Documentación Swagger interactiva
 - **GET** `/openapi.json` - Schema OpenAPI
@@ -201,6 +217,9 @@ IA_audio_agent_cinte/
 │   ├── __init__.py
 │   ├── main.py                 # FastAPI app principal
 │   ├── config.py               # Configuración
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   └── audio_chat.py       # Chat conversacional de voz
 │   ├── models/
 │   │   ├── __init__.py
 │   │   └── schemas.py          # Pydantic schemas
@@ -285,7 +304,7 @@ OPENAI_API_KEY=your_api_key_here
 APP_NAME=Voice Agent AI
 DEBUG=False
 MAX_AUDIO_SIZE_MB=10
-ALLOWED_AUDIO_FORMATS=.wav,.mp3
+ALLOWED_AUDIO_FORMATS=.wav,.mp3,.webm,.m4a,.ogg
 ASR_MODEL=gpt-4o-mini-transcribe
 LLM_MODEL=gpt-5-nano
 TTS_MODEL=gpt-4o-mini-tts

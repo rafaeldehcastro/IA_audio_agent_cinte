@@ -12,6 +12,7 @@ from app.services.asr_service import transcribe_audio
 from app.services.llm_service import process_text
 from app.services.tts_service import generate_speech
 from app.utils.audio_utils import validate_audio_file, save_temp_file, cleanup_temp_file
+from app.routes import audio_chat
 
 # Configurar logging
 logging.basicConfig(
@@ -38,6 +39,9 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Incluir routers adicionales
+app.include_router(audio_chat.router)
+
 
 @app.get("/")
 async def root():
@@ -48,6 +52,8 @@ async def root():
         "status": "running",
         "endpoints": {
             "voice_agent": "/voice-agent",
+            "audio_chat": "/audio-chat",
+            "audio_chat_demo": "/audio-chat/demo",
             "voice_agent_audio": "/voice-agent-audio",
             "test_page": "/test-audio",
             "health": "/health",

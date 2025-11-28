@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     
     # Audio
     max_audio_size_mb: int = 10
-    allowed_audio_formats: str = ".wav,.mp3"
+    allowed_audio_formats: str = ".wav,.mp3,.webm,.m4a,.ogg"
     
     # Models
     asr_model: str = "gpt-4o-mini-transcribe"

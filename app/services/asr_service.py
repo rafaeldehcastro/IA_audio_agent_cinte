@@ -22,13 +22,20 @@ async def transcribe_audio(audio_file_path: str) -> str:
     try:
         client = OpenAI(api_key=settings.openai_api_key)
         
+        # Determinar el nombre del archivo con extensión correcta
+        import os
+        filename = os.path.basename(audio_file_path)
+        
         with open(audio_file_path, "rb") as audio_file:
-            logger.info(f"Transcribiendo audio con modelo {settings.asr_model}")
+            logger.info(f"Transcribiendo audio: {filename} con modelo {settings.asr_model}")
             
-            # Usando gpt-4o-mini-transcribe (el más económico)
+            # Importante: Especificar el nombre del archivo para que OpenAI detecte el formato
+            from pathlib import Path
+            file_tuple = (filename, audio_file, "application/octet-stream")
+            
             transcription = client.audio.transcriptions.create(
                 model=settings.asr_model,
-                file=audio_file,
+                file=file_tuple,
                 language="es"  # Especificamos español
             )
         
@@ -36,5 +43,5 @@ async def transcribe_audio(audio_file_path: str) -> str:
         return transcription.text
         
     except Exception as e:
-        logger.error(f"Error en transcripción: {str(e)}")
+        logger.error(f"Error en transcripción: {str(e)}", exc_info=True)
         raise Exception(f"Error al transcribir audio: {str(e)}")
