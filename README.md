@@ -313,7 +313,7 @@ TTS_VOICE=alloy
 
 ## 📝 Licencia
 
-Este proyecto es parte de un desafío técnico para CINTE.
+Este proyecto es parte de un desafío técnico para SAVANT.
 
 ## 👨‍💻 Autor
 
